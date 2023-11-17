@@ -1,0 +1,113 @@
+# Copyright (C)
+## Power System Analysis and Planning Department
+## National Load Dispatch Centre (NLDC)
+## Vietnam Electricity(EVN)
+## Address: Floor 10, Tower A, 11 Cua Bac, Ba Dinh, Ha Noi
+##
+##
+## DOC-ME PLEASE!
+## Solve Py
+##
+##
+## HISTORY
+##
+## print(getMM())
+## Feb 13, 2017   : First version (PhuongPQ)
+##
+import psse35
+import psspy
+import time
+#
+_i = psspy.getdefaultint()
+_f = psspy.getdefaultreal()
+_s = psspy.getdefaultchar()
+def solve_py():
+    t0= time.process_time()
+    
+    #
+    def getMM():
+        ierr, xarray =  psspy.abuscplx(-1, 1, 'MISMATCH')
+        mm = 0
+        for i in range(len(xarray[0])):
+            mm = max(mm,abs(xarray[0][i]))
+        return mm
+    #
+    mm0 = getMM()
+    tap = 0
+    #
+
+    def pout(t):
+        if t>0:
+            psspy.progress_output(1, "", 0)
+            psspy.alert_output(1, "", 0)
+        else:
+            psspy.progress_output(6, "", 0)
+            psspy.alert_output(6, "", 0)
+
+    def solve1(niter):
+        psspy.newton_tolerance(0.5) #tolerance
+        psspy.solution_parameters_4([_i,niter,_i,_i,_i],[_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f]) # iteration number
+        #
+        psspy.fdns([tap,0,0,1,1,0,99,0])
+    ##    psspy.fdns([_i,_i,_i,_i,_i,_i,0,1])
+        ival = psspy.solved()
+        mm = getMM()
+        return mm,ival
+    #
+    def solve2(niter):
+        psspy.newton_tolerance(0.1) #tolerance
+        psspy.solution_parameters_4([_i,niter,_i,_i,_i],[_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f]) # iteration number
+        #
+    ##    psspy.fdns([tap,0,0,1,1,0,99,0])
+        psspy.fnsl([0,0,0,1,1,0,99,0])
+        ival = psspy.solved()
+        mm = getMM()
+        return mm,ival
+    #
+    def solve3(niter):
+        psspy.newton_tolerance(0.05) #tolerance
+        psspy.solution_parameters_4([_i,niter,_i,_i,_i],[_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f,_f]) # iteration number
+        #
+        psspy.fnsl([tap,0,0,1,1,0,99,0])
+    ##    psspy.fnsl([_i,_i,_i,_i,_i,_i,0,0])
+        ival = psspy.solved()
+        mm = getMM()
+        return mm,ival
+    #
+    def solve():
+        mm0 = getMM()
+        if mm0<0.1:
+    ##        pout(0)
+    ##        solve3(50)
+    ##        pout(1)
+            return solve3(50)
+        #
+    ##    pout(0)
+    ##    solve2(100)
+    ##    pout(1)
+        mm1,ival1 = solve2(50)
+        if ival1>1 or mm1>5.0:
+            return mm1,ival1
+        ##
+    ##    pout(0)
+    ##    solve3(50)
+    ##    pout(1)
+        mm3,ival3 = solve3(50)
+        #
+        return mm3,ival3
+    #
+    pout(0)
+    mm,ival = solve()
+    pout(1)
+    mm,ival = solve()
+    if mm<=0.05:
+        print ('\nHoi Tu Roi!,  bmm=', format(mm, '0.1E'),'MVA')
+    elif ival >1:
+        print ( '\nBlown up,  bmm=', round(mm, 1),'MVA')
+    else:
+        print ('\nNot Convergence!,  bmm=', format(mm, '0.1E'),'MVA')
+    #
+    
+    print ('time=',round(time.process_time()-t0,3), '[s]')
+    return mm
+
