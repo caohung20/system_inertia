@@ -11,12 +11,13 @@ import shutil
 import multiprocessing
 
 # Ini SEtting
-import IniStep_Config
+from IniStep_Config import Input
+input = Input()
 
-Python_func = IniStep_Config.Python_func
-dyrfile     = IniStep_Config.dyrfile
-PSSE_Data   = IniStep_Config.PSSE_Data
-Out_Data    = IniStep_Config.Out_Data
+Python_func = input.Python_func
+dyrfile     = input.dyrfile
+PSSE_Data   = input.PSSE_Data
+Out_Data    = input.Out_Data
 
 sys.path.insert(0,Python_func) 
 
@@ -41,6 +42,12 @@ file_PSSE    = 'test'
 PSSE_open(file_PSSE,PSSE_Data)
 sol = PSSE_Solve()
 P_out_hung()
+ieer, iarr = psspy.agenbusreal(-1, 1, 'PGEN')
+i2eer, i2arr = psspy.agenbusint(-1, 4, 'NUMBER')
+print(iarr)
+print(i2arr)
+
+
 casename = 'case7'
 
 # Specify the path for the new folder
@@ -68,7 +75,7 @@ psspy.conl(0,1,2,[1,0],[ 100.0,0.0,0.0, 100.0])
 psspy.conl(0,1,3,[1,0],[ 100.0,0.0,0.0, 100.0])
 
 # load base on frequency
-#psspy.add_load_model(4, "*", 4, 1, r"""CMLDALU2""", 12, 0, ' ',132, 0.0)
+# #psspy.add_load_model(4, "*", 4, 1, r"""CMLDALU2""", 12, 0, ' ',132, 0.0)
 
 
 #               # Check API

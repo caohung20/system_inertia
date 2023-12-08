@@ -1,5 +1,4 @@
-# File:"G:\system_inertia\09_Test_QH\09_Test_QH\explore_command.py", generated on SUN, NOV 12 2023  10:53, PSS(R)E Xplore release 35.03.03
-psspy.scal_4(0,1,1,[0,0,0,0,0,0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0])
-psspy.scal_4(0,1,2,[_i,_i,_i,1,0,1],[ 2720.0, 3258.6,0.0,-600.0, 950.0,-.0, 1657.5])
-psspy.scal_4(0,1,1,[0,0,0,0,0,0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0])
-psspy.scal_4(0,1,2,[_i,_i,_i,_i,_i,_i],[_f,_f,_f,_f,_f,_f,_f])
+# File:"G:\system_inertia\09_Test_QH\03_QH_2511\explore_command.py", generated on SUN, NOV 26 2023   3:09, PSS(R)E Xplore release 35.03.03
+a = "   101 'GENROU'  1     6.5000      0.60000E-01  0.20000      0.50000E-01 4.0000       0.0000       1.8000       1.7500      0.60000     0.80000      0.30000      0.15000      0.90000E-01  0.38000    /101 'IEEET1'  1     0.0000       400.00      0.40000E-01   7.3000    -7.3000       1.0000      0.80000      0.30000E-01   1.0000    0.0000       2.4700      0.35000E-01   4.5000      0.47000    /"
+a = a.split("/")
+print(a)
